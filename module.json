@@ -2,9 +2,17 @@
   "id": "anchor-links-pad",
   "title": "Anchor Links Pad",
   "description": "Lista pessoal de âncoras por jogador (arraste documentos e clique para abrir).",
-  "version": "0.1.0",
-  "compatibility": { "minimum": "12", "verified": "13" },
-  "authors": [{ "name": "Seu Nome", "url": "https://github.com/seuusuario" }],
+  "version": "1.1.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12"
+  },
+  "authors": [
+    {
+      "name": "Seu Nome",
+      "url": "https://github.com/SEUUSUARIO"
+    }
+  ],
   "esmodules": ["scripts/anchor-pad.js"],
   "packs": [],
   "manifest": "https://raw.githubusercontent.com/Mattguto/foundryvtt-anchor-links-pad/main/module.json",
