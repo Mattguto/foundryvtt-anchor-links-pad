@@ -92,24 +92,56 @@ class AnchorPad extends Application {
     dz.addEventListener("dragleave", () => { dz.style.opacity = ".9"; });
 
     dz.addEventListener("drop", async ev => {
-      ev.preventDefault();
-      dz.style.opacity = ".9";
+  ev.preventDefault();
+  dz.style.opacity = ".9";
 
-      const txt = ev.dataTransfer.getData("text/plain");
-      if (!txt) return;
-      let data;
-      try { data = JSON.parse(txt); } catch { return ui.notifications.warn("Não reconheci o drop."); }
+  let data;
+  try {
+    // Usa o parser oficial do Foundry p/ drag & drop
+    data = TextEditor.getDragEventData(ev);
+  } catch (e) {
+    console.error(e);
+    return ui.notifications.warn("Não reconheci o drop.");
+  }
 
-      const uuid = data.uuid;
-      if (!uuid) return ui.notifications.warn("Documento não possui UUID.");
-      let label;
-      try {
-        const doc = await fromUuid(uuid);
-        label = doc?.name ?? data?.name ?? uuid;
-      } catch { label = data?.name ?? uuid; }
+  // 1) Caminho feliz: já veio com UUID
+  let uuid = data?.uuid;
 
-      await this._addLink({ uuid, label });
-    });
+  // 2) Itens/atores do compêndio: pack + id
+  if (!uuid && data?.pack && data?.id) {
+    uuid = `Compendium.${data.pack}.${data.id}`;
+  }
+
+  // 3) Documentos do mundo: coleção + id (ex.: "Item", "Actor", etc.)
+  if (!uuid && data?.type && data?.id) {
+    try {
+      const collection = game.collections.get(data.type);
+      const doc = collection?.get(data.id);
+      uuid = doc?.uuid;
+    } catch (e) {
+      console.debug("Falha ao resolver doc do mundo:", e);
+    }
+  }
+
+  // 4) Último recurso: tentar achar um @UUID[...] no texto
+  if (!uuid && typeof data === "string") {
+    const m = data.match(/@UUID\[(.+?)\]/);
+    if (m) uuid = m[1];
+  }
+
+  if (!uuid) return ui.notifications.warn("Não consegui identificar o documento ou UUID.");
+
+  // Resolve rótulo
+  let label;
+  try {
+    const doc = await fromUuid(uuid);
+    label = doc?.name ?? data?.name ?? uuid;
+  } catch {
+    label = data?.name ?? uuid;
+  }
+
+  await this._addLink({ uuid, label });
+});
 
     html.find(".add-manual").on("click", async () => {
       const uuid = html.find('input[name="uuid"]').val()?.trim();
