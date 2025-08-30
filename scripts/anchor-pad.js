@@ -152,18 +152,34 @@ Hooks.once("ready", () => {
   game.anchorLinksPad = game.anchorLinksPad || new AnchorPad();
 
   // Botão na barra de CONTROLES da cena (esquerda)
-  Hooks.on("getSceneControlButtons", controls => {
+  // SUBSTITUA o hook anterior de getSceneControlButtons por este
+Hooks.on("getSceneControlButtons", (controls) => {
+  // tenta achar o painel "token"
+  const tokenCtl = controls.find(c => c.name === "token");
+  if (tokenCtl) {
+    tokenCtl.tools.push({
+      name: "anchor-links-pad",
+      title: "Anchor Links",
+      icon: "fas fa-link",
+      button: true,
+      visible: true,
+      onClick: () => game.anchorLinksPad.render(true),
+      toggle: false
+    });
+  } else {
+    // fallback: cria um painel próprio se por algum motivo não houver "token"
     controls.push({
       name: "anchor-links-pad",
       title: "Anchor Links",
       icon: "fas fa-link",
       layer: null,
       button: true,
-      visible: true, // todos vêem
+      visible: true,
       onClick: () => game.anchorLinksPad.render(true),
       tools: []
     });
-  });
+  }
+});
 
   // Botão EXTRA na barra superior de navegação de cenas
   Hooks.on("renderSceneNavigation", (_app, html) => {
