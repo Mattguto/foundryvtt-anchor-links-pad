@@ -2,10 +2,10 @@
   "id": "anchor-links-pad",
   "title": "Anchor Links Pad",
   "description": "Lista pessoal de âncoras por jogador (arraste documentos e clique para abrir).",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "compatibility": {
     "minimum": "11",
-    "verified": "12"
+    "verified": "13"
   },
   "authors": [
     {
