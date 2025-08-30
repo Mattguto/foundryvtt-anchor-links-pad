@@ -13,9 +13,20 @@
   #anchor-links-pad .btns a:hover { opacity:1; }
   #anchor-links-pad .sub { color: var(--color-text-dark-secondary); font-size: 11px; margin-top:2px; word-break: break-all; }
   #anchor-links-pad .toolbar { display:flex; gap:6px; }
-  #anchor-links-pad input[name="label"],
-  #anchor-links-pad input[name="uuid"] { width:100%; }
+  #anchor-links-pad input[name="label"], #anchor-links-pad input[name="uuid"] { width:100%; }
   #anchor-links-pad .footer { font-size:11px; opacity:.8; }
+
+  #anchor-links-pad .open-doc {
+    background: var(--color-bg-option);
+    border: 1px solid var(--color-border-light-tertiary);
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font: inherit;
+  }
+  #anchor-links-pad .open-doc:hover {
+    filter: brightness(1.05);
+  }
 </style>
 
 <div class="pad" tabindex="0">
@@ -33,7 +44,7 @@
     {{#each links as |l i|}}
       <li class="anchor-row" data-idx="{{i}}">
         <div class="row">
-          <a href="#" class="open-doc" data-uuid="{{l.uuid}}">{{l.label}}</a>
+          <button type="button" class="open-doc" data-uuid="{{l.uuid}}">{{l.label}}</button>
           <div class="btns">
             <a class="copy-uuid" data-uuid="{{l.uuid}}" title="Copiar @UUID">⧉</a>
             <a class="del" title="Remover">✕</a>
